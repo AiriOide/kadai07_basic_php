@@ -6,10 +6,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $data = "$name,$email,$question\n";
     file_put_contents('data.csv', $data, FILE_APPEND);
+    # header("Location: read.php");
+    # exit();
+
+        // 処理成功のフラグ
+        $success = true;
+    } else {
+        // 不正なアクセス
+        $success = false;
     
-    header("Location: read.php");
-    exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -18,38 +25,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>データ登録</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #FFE6F2;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .message {
-            background-color: #FFF0F5;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        h1 {
-            color: #FF69B4;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="message">
+    <?php if ($success): ?>
         <h1>データが登録されました</h1>
         <p>3秒後に結果表示ページに移動します...</p>
+        <?php else: ?>
+            <h1>エラーが発生しました</h1>
+            <p>正しい方法でフォームを送信してください。</p>
+            <a href="index.php">入力ページに戻る</a>
+        <?php endif; ?>
     </div>
+    <?php if ($success): ?>
     <script>
         setTimeout(function() {
             window.location.href = 'read.php';
         }, 3000);
     </script>
+    <?php endif; ?>
 </body>
 </html>
